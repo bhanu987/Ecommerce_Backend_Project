@@ -7,6 +7,9 @@ const user_model = require("./models/user.model")
 const db_config = require("./configs/db.config")
 
 const bcrypt = require('bcryptjs')
+const app = express();
+
+app.use(express.json()) //middleware
 
 
 /* Create an admin user at the start of application if not present */
@@ -22,7 +25,7 @@ db.on("error",()=>{
 })
 
 db.once("open",()=>{
-    console.log("Successfully connected with MongoDB")
+    console.log("Connected with MongoDB")
     init();
 })
 
@@ -59,12 +62,16 @@ console.log("Error while reading data ", err)
 }
 
 
+//Stitch the routes to server
 
+//calling routes and passing app object
+require('./routes/auth.route')(app)
 
 /*Start the server */
 
-const app = express();
+
 
 app.listen(server_config.PORT,()=>{
+
     console.log("Server started at : "+server_config.PORT)
 })

@@ -24,14 +24,14 @@ const userSchema = new mongoose.Schema({
         required :true
     },
     email : {
-        type :String , 
+        type : String , 
         required : true,
         lowercase :true,
-        unoque : true , 
+        unique : true , 
         minLength : 10
     },
     userType : {
-        type :String , 
+        type : String , 
         default :"CUSTOMER",
         enum : ["CUSTOMER","ADMIN"]
     }
