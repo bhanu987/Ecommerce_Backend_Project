@@ -11,4 +11,11 @@ const authMW = require("../middlewares/auth_middleware")
 
 module.exports = (app)=>{
    app.post("/ecomm/api/v1/auth/signup",[authMW.verifySignUpBody],authController.signup)
+
+   /*Define the routes for 
+   POST localhost:8888/ecomm/api/v1/auth/sigin*/
+
+   app.post("/ecomm/api/v1/auth/signin",[authMW.verifySigninBody],authController.signin)
+
+
 }

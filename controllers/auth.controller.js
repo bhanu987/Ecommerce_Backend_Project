@@ -5,6 +5,8 @@
 
 const bcrypt = require('bcryptjs')
 const user_model = require('../models/user.model')
+const jwt = require('jsonwebtoken')
+const secret = require('../configs/auth.config')
 
 exports.signup = async (req,res)=>
 {
@@ -50,4 +52,43 @@ exports.signup = async (req,res)=>
     // 3. Send the response to user
 
 
+}
+
+exports.signin = async(req,res)=>{
+
+    //Check if the userID is present in the system
+   const user = await  user_model.findOne(
+        {
+            userID:req.body.userID
+        }
+    )
+if(user == null){
+   return res.status(400).send({
+        msg:"UserId passed is not valid"
+    })
+}
+
+    //check if password is correct
+const isPasswordValid = bcrypt.compareSync(req.body.password,user.password) 
+//it return a boolean value - true or false
+
+if(!isPasswordValid){
+   return res.status(401).send({msg:"Password is incorrect"})
+}
+
+    //using jwt we will create a access token with a given TTL and return
+
+    const token =jwt.sign({id: user.userID },secret.secret,{
+expiresIn : 120
+    })
+
+
+    res.status(200).send({
+        name:user.name,
+        userID : user.userID,
+        email: user.email,
+        userType : user.userType,
+        acesstoken : token
+
+    })
 }
